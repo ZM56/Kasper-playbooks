@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Restart Kaspersky for Linux
+      systemd:
+        name: '{{ item }}'
+        state: restarted
+        with_items:
+          - kesl
+          - klnagent
+          - klnagent64
+...
