@@ -1,0 +1,44 @@
+---
+- hosts: all
+  become: true
+  remote_user: admin
+
+  tasks:
+  # DEBIAN System
+  - block:
+    - name: Copy agent to target host
+      copy:
+        src: "/home/admin/install_kaspersky/klnagent.deb"
+        dest: "/home/admin/"
+        owner: admin
+        group: admin
+        mode: '0644'
+
+    - name: Run install Kaspersky Agent for .deb package
+      shell: /bin/sh /home/admin/klnagent.deb/klnagent64.sh
+
+    - name: Deleting the agent directory
+      file:
+        path: /home/admin/klnagent.deb
+        state: absent
+    when: ansible_os_family == "Debian"
+
+
+  # REDHAT System
+  - block:
+    - name: Copy agent to target host
+      copy:
+        src: "/home/admin/install_kaspersky/klnagent.rpm"
+        dest: "/home/admin/"
+        owner: admin
+        group: admin
+        mode: '0644'
+
+    - name: Run install Kaspersky Agent for .rmp package
+      shell: /bin/sh /home/lnxadm/klnagent.rpm/akinstall.sh
+
+    - name: Deleting the agent directory
+      file:
+        path: /home/admin/klnagent.deb
+        state: absent
+    when: ansible_os_family == "RedHat"
